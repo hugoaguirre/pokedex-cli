@@ -8,12 +8,12 @@ type Config struct {
 
 func LoadConfig() (Config, error) {
 	var config Config
-	err := envconfig.Process("pokeapi", &config)
+	err := envconfig.Process("pa", &config)
 	return config, err
 }
 
 type PokeApiConf struct {
-	PokedexUrl string `envconf:"pokedex_url"`
-	PokeApi    string `envconf:"pokemon_api_url"`
-	Region     string `envconf:"pokemon_region" default:"hoenn"`
+	PokedexUrl string `envconfig:"pokedex_url"`
+	PokeApi    string `envconfig:"pokemon_api_url"`
+	Region     string `envconfig:"pokemon_region" default:"hoenn"`
 }

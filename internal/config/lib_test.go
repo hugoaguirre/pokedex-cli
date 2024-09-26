@@ -10,4 +10,5 @@ func TestDefaultRegion(t *testing.T) {
 	config, err := LoadConfig()
 	assert.NilError(t, err)
 	assert.Equal(t, config.PokeApi.Region, "hoenn")
+	assert.Assert(t, config.PokeApi.PokedexUrl != "")
 }

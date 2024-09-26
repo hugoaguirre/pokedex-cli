@@ -1,45 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"log"
 
-	tea "github.com/charmbracelet/bubbletea"
+	"github.com/hugoaguirre/pokedex-cli/internal/client/pokeapi"
 )
-
-type model struct {
-	// pokemon list
-	// pokemon sprites ?
-	err error
-}
-
-type (
-	errMsg struct{ err error }
-)
-
-// error message interface on the message
-func (e errMsg) Error() string { return e.err.Error() }
-
-func checkServer() tea.Msg {
-	return nil
-}
-
-func (m model) Init() tea.Cmd {
-	return checkServer
-}
-
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	return m, nil
-}
-
-func (m model) View() string {
-	return ""
-}
 
 func main() {
-	p := tea.NewProgram(model{})
-	if _, err := p.Run(); err != nil {
-		fmt.Printf("init error: %v", err)
-		os.Exit(1)
+	pokeApiClient, err := pokeapi.NewClient()
+	if err != nil {
+		log.Fatalf("unable to init pokeapi client: %v", err)
 	}
+
+	p, err := pokeApiClient.Pokedex()
+	if err != nil {
+		log.Fatalf("unable to get pokedex: %v", err)
+	}
+
+	log.Printf("%#v", p)
 }

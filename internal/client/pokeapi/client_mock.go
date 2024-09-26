@@ -18,25 +18,25 @@ func (m *MockPokeApiClient) HealthCheck() error {
 	return nil
 }
 
-func (m *MockPokeApiClient) Pokedex() (Pokedex, error) {
+func (m *MockPokeApiClient) Pokedex() (PokedexData, error) {
 	pokemonEntries := []PokemonEntries{
 		{
-			252,
 			PokemonSpecies{
 				"treeko",
 				"fake/url",
 			},
+			252,
 		},
 		{
-			3,
 			PokemonSpecies{
 				"pikachu",
 				"fake/url",
 			},
+			3,
 		},
 	}
 
-	return Pokedex{
+	return PokedexData{
 		ID:             1,
 		Name:           "hoenn",
 		PokemonEntries: pokemonEntries,

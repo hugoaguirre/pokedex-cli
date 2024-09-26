@@ -1,6 +1,7 @@
 package pokeapi
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/hugoaguirre/pokedex-cli/internal/config"
@@ -8,7 +9,7 @@ import (
 
 type Client interface {
 	HealthCheck() error
-	Pokedex() (Pokedex, error)
+	Pokedex() (PokedexData, error)
 	// TODO: define more functions
 }
 
@@ -18,7 +19,11 @@ type client struct {
 	config config.Config
 }
 
-func NewClient(c config.Config) (Client, error) {
+func NewClient() (Client, error) {
+	c, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("unable to get config for client: %v", err)
+	}
 	return &client{
 		config: c,
 	}, nil

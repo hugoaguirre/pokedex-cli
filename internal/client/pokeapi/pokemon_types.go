@@ -10,7 +10,7 @@ type PokemonEntries struct {
 	EntryNumber    int            `json:"entry_number"`
 }
 
-type Pokedex struct {
+type PokedexData struct {
 	Name           string           `json:"name"`
 	PokemonEntries []PokemonEntries `json:"pokemon_entries"`
 	ID             int              `json:"id"`
