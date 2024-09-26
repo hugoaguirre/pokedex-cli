@@ -1,0 +1,14 @@
+# treecko example
+SHINY_SPRITE_URL="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/35.png"
+NORMAL_SPRITE_URL="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png"
+
+# get hoenn pokedex
+HOENN_POKEDEX_URL="https://pokeapi.co/api/v2/pokedex/hoenn/"
+
+# pokemon info:
+https://pokeapi.co/api/v2/pokemon/{id or name}/
+
+
+# Overall, you'll have to get the Hoenn Pokedex and get all the pokemon Ids so, later
+# you can GET information from pokemon endpoint and fetch sprites and base stats 
+
