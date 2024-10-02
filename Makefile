@@ -9,7 +9,7 @@ ifeq ($(UNAME),Darwin)
 	FIND_BIN=gfind
 endif
 
-.SHELLFLAGS = -ec
+# .SHELLFLAGS = -ec
 .ONESHELL:
 
 build: ./bin/pokeapi-cli
