@@ -62,15 +62,15 @@ func getPokedex() (pokeapi.PokedexData, error) {
 func Start() {
 	pokedex, err := getPokedex()
 	if err != nil {
-		fmt.Println("unable to init poke-api client: %v", err)
+		fmt.Printf("unable to init poke-api client: %v", err)
 		os.Exit(1)
 	}
 
 	items := make([]list.Item, 0)
 	for i := 0; i < len(pokedex.PokemonEntries); i++ {
 		items = append(items, item{
-			title: pokedex.PokemonEntries[i].PokemonSpecies.Name,
-			desc:  pokedex.Name,
+			title: capitalize(pokedex.PokemonEntries[i].PokemonSpecies.Name),
+			desc:  capitalize(pokedex.Name),
 		})
 	}
 
