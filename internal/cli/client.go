@@ -2,15 +2,24 @@ package cli
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/charmbracelet/bubbles/paginator"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/hugoaguirre/pokedex-cli/internal/client/pokeapi"
+	"github.com/muesli/termenv"
 )
 
-var docStyle = lipgloss.NewStyle().Margin(1, 2)
+var (
+	AccentColor       = lipgloss.ANSIColor(termenv.ANSIYellow)
+	docStyle          = lipgloss.NewStyle().Margin(1, 2)
+	ItemStyle         = lipgloss.NewStyle().PaddingLeft(1).BorderStyle(lipgloss.HiddenBorder()).BorderLeft(true)
+	SelectedItemStyle = ItemStyle.Foreground(AccentColor).Bold(true).BorderStyle(lipgloss.ThickBorder()).BorderForeground(AccentColor)
+)
 
 type item struct {
 	title string
@@ -20,6 +29,27 @@ type item struct {
 func (i item) Title() string       { return i.title }
 func (i item) Description() string { return i.desc }
 func (i item) FilterValue() string { return i.title }
+
+type itemDelegate struct{}
+
+func (d itemDelegate) Height() int                             { return 1 }
+func (d itemDelegate) Spacing() int                            { return 0 }
+func (d itemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
+func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	i, ok := listItem.(item)
+	if !ok {
+		return
+	}
+
+	render := ItemStyle.Render
+	if index == m.Index() {
+		render = func(s ...string) string {
+			return SelectedItemStyle.Render(strings.Join(s, " "))
+		}
+	}
+
+	fmt.Fprint(w, render(i.Title()))
+}
 
 type model struct {
 	list list.Model
@@ -70,12 +100,13 @@ func Start() {
 	for i := 0; i < len(pokedex.PokemonEntries); i++ {
 		items = append(items, item{
 			title: capitalize(pokedex.PokemonEntries[i].PokemonSpecies.Name),
-			desc:  capitalize(pokedex.Name),
 		})
 	}
 
-	m := model{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}
-	m.list.Title = fmt.Sprintf("%s - Pokedex", pokedex.Name)
+	m := model{list: list.New(items, itemDelegate{}, 0, 0)}
+	m.list.Title = fmt.Sprintf("%s - Pokedex", capitalize(pokedex.Name))
+	// m.list.SetShowTitle(false)
+	m.list.Paginator.Type = paginator.Arabic
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
 
